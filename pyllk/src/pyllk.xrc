@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resource>
+  <object class="wxFrame" name="MAINFRAME">
+    <title>Pyllk---Python连连看</title>
+    <centered>1</centered>
+    <size>720,520</size>
+    <object class="wxMenuBar" name="MAINMENUBAR">
+      <object class="wxMenu" name="MENU_GAME">
+        <label>游戏(&amp;G)</label>
+        <object class="wxMenu" name="SINGLEGAME">
+          <label>单人游戏(&amp;S)</label>
+          <object class="wxMenuItem" name="MENUEASY">
+            <label>简单(&amp;E)</label>
+            <accel>F1</accel>
+          </object>
+          <object class="wxMenuItem" name="MENUNORMAL">
+            <label>一般(&amp;N)</label>
+            <accel>F2</accel>
+          </object>
+          <object class="wxMenuItem" name="MENUHARD">
+            <label>困难(&amp;H)</label>
+            <accel>F3</accel>
+          </object>
+          <object class="separator"/>
+          <object class="wxMenuItem" name="MENURESUME">
+            <label>继续上次游戏(&amp;R)</label>
+            <accel>F4</accel>
+            <enabled>0</enabled>
+          </object>
+        </object>
+        <object class="wxMenu" name="TWOPLAYERGAME">
+          <label>双人对战(&amp;T)</label>
+          <enabled>0</enabled>
+        </object>
+        <object class="wxMenu" name="NETPLAYGAME">
+          <label>网络对战(&amp;N)</label>
+          <enabled>0</enabled>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="MENUGIVEUP">
+          <label>放弃(&amp;G)</label>
+          <accel>F12</accel>
+          <enabled>0</enabled>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="MENUQUIT">
+          <label>退出(&amp;Q)</label>
+          <bitmap stock_id="wxART_QUIT"></bitmap>
+          <accel>Ctrl+Q</accel>
+        </object>
+      </object>
+      <object class="wxMenu" name="MENU_FUNC">
+        <label>功能(&amp;F)</label>
+        <object class="wxMenuItem" name="MENUHINT">
+          <label>提示(&amp;H)</label>
+          <accel>F5</accel>
+        </object>
+        <object class="wxMenuItem" name="MENUSHUFFLE">
+          <label>重新洗牌(&amp;S)</label>
+          <accel>F6</accel>
+        </object>
+        <object class="wxMenuItem" name="MENUPAUSEPROCEED">
+          <label>&amp;Pause/Proceed</label>
+          <accel>F7</accel>
+        </object>
+        <object class="separator"/>
+        <object class="wxMenuItem" name="MENUHIDE">
+          <label>隐藏(&amp;i)</label>
+          <accel>ESCAPE</accel>
+          <enabled>0</enabled>
+        </object>
+      </object>
+      <object class="wxMenu" name="MENU_CONF">
+        <label>设置(&amp;S)</label>
+      </object>
+      <object class="wxMenu" name="MENU_MARK">
+        <label>分数(&amp;c)</label>
+      </object>
+      <object class="wxMenu" name="MENU_ABOUT">
+        <label>关于(&amp;A)</label>
+        <object class="wxMenuItem" name="MENUITEM_HOWTOPLAY">
+          <label>游戏规则(&amp;H)</label>
+          <bitmap stock_id="wxART_QUESTION"></bitmap>
+        </object>
+        <object class="wxMenuItem" name="MENUITEM_ABOUT">
+          <label>关于(&amp;A)</label>
+          <bitmap stock_id="wxART_INFORMATION"></bitmap>
+        </object>
+      </object>
+    </object>
+    <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX|wxNO_FULL_REPAINT_ON_RESIZE</style>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_DIFF">
+              <label>难度：</label>
+              <size>80,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_LEVEL">
+              <label>等级：</label>
+              <size>80,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_LIFE">
+              <label>生命：</label>
+              <size>80,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_HINT">
+              <label>提示：</label>
+              <size>80,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_CHANGE">
+              <label>无变化</label>
+              <size>80,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxGauge" name="GAUGE_TIME">
+              <size>270,20</size>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="LABEL_SCORE">
+              <label>0</label>
+              <size>50,20</size>
+              <style>wxALIGN_CENTRE</style>
+            </object>
+          </object>
+        </object>
+        <border>5</border>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="ABOUT">
+    <title>关于连连看(Python)</title>
+    <centered>1</centered>
+    <style>wxDEFAULT_DIALOG_STYLE|wxCAPTION</style>
+    <object class="wxBoxSizer">
+      <orient>wxHORIZONTAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticBitmap">
+          <bitmap stock_id="wxART_INFORMATION"></bitmap>
+          <size>48,48</size>
+        </object>
+        <flag>wxTOP</flag>
+        <border>10</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>\tPython连连看 0.1\n\tpro711制作\t pro711@gmail.com\t复旦大学附属中学\t 20070203\n</label>
+              <style>wxALIGN_LEFT</style>
+            </object>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>5</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>纪念我们永远的二班！</label>
+              <style>wxALIGN_CENTRE</style>
+              <font>
+                <size>12</size>
+                <family>default</family>
+                <style>normal</style>
+                <weight>normal</weight>
+                <underlined>0</underlined>
+              </font>
+            </object>
+            <flag>wxALIGN_CENTRE</flag>
+            <border>5</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Library General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.</label>
+            </object>
+            <flag>wxALL</flag>
+            <border>5</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>本软件使用Python和wxPython开发。\n希望能与大家共同学习，共同提高！\n</label>
+            </object>
+            <flag>wxALL|wxALIGN_CENTRE</flag>
+            <border>3</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticLine"/>
+            <flag>wxEXPAND</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxButton" name="ABOUT_THANKS">
+                  <label>致谢</label>
+                </object>
+              </object>
+              <object class="spacer">
+                <size>250,26</size>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="ABOUT_CLOSE">
+                  <label>关闭</label>
+                  <default>1</default>
+                </object>
+              </object>
+            </object>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>10</border>
+          </object>
+        </object>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="HOWTOPLAY">
+    <title>连连看游戏规则</title>
+    <centered>1</centered>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticBitmap">
+          <bitmap>llk_classic/HowToPlay.jpg</bitmap>
+        </object>
+        <flag>wxALL|wxEXPAND</flag>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="THANKS">
+    <title>致谢</title>
+    <centered>1</centered>
+    <size>300,200</size>
+    <style>wxDEFAULT_DIALOG_STYLE|wxCAPTION</style>
+    <object class="wxTextCtrl">
+      <value>本程序的算法参考alpher的llk_linux\n本程序中的图片，声音来自alpher的llk_linux\n在此向alpher表示感谢！</value>
+      <size>300,200</size>
+      <style>wxTE_NO_VSCROLL|wxTE_MULTILINE|wxTE_READONLY</style>
+    </object>
+  </object>
+</resource>
