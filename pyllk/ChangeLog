@@ -1,0 +1,18 @@
+Pyllk---Python Lian Lian Kan
+
+ChangeLog
+=========
+2007-07-27
+Ver 0.1
+Fixed a bug in declaring the llkgame class.
+Fixed a bug that causes flickering under Windows(R) while linking.
+Fixed a few bugs in the game algorithm.
+
+2007-07-09
+Ver 0.1beta
+Fixed a bug in shuffling cards.
+Improved link effect.
+
+2007-07-08
+Ver 0.1alpha
+Initial release.

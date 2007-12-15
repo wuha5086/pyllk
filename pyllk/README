@@ -1,0 +1,65 @@
+Pyllk---A Python implementation of the popular LianLianKan game.
+LICENCE: GPL
+
+Introduction
+============
+Pyllk is a game which I wrote in order to practise my Python and wxPython programming.
+
+It is written in Python and uses the wxPython toolkit to build the GUI so it is cross-platform and can be run seamlessly on Linux, Windows(R), and possibly other platforms.
+It implements the basic functions similar to that of llk_linux which was written in C and GTK+.
+
+Installation
+============
+No installation needed.
+
+Just run the pyllk.py file.
+In Windows(R), double click on the file.
+In Linux, run it in a terminal by typing ./pyllk.py or open it in a file manager such as Nautilus and choose RUN.
+
+Requirements
+============
+Python(>=2.4) and wxPython(>=2.6) are needed to run the game.
+	Python	www.python.org
+	wxPython	www.wxpython.org
+
+Reporting a BUG
+============
+If there is a bug or you have any question please Email me at pro711@gmail.com
+
+About the author
+============
+pro711, real name ChenTao, is a 18-year-old student of High School affiliated to Fudan University.
+He is interested in C/C++, Linux and Python.
+
+
+
+Pyllk---Python连连看
+
+LICENCE: GPL
+
+介绍
+============
+Python连连看是我为了练习Python与wxPython而编写的一个小游戏，基本上实现了类似llk_linux的功能。
+使用Python和wxPython编写，所以它可以无缝地运行在Linux，Windows(R)和其它平台上。
+
+安装
+============
+不需要安装，直接运行pyllk.py即可。
+在Windows(R)下，双击pyllk.py。
+在Linux下，在终端中输入./pyllk.py运行或在文件管理器中打开运行。
+
+系统需求
+============
+需要系统中安装有Python(>=2.4),wxPython(>=2.6)。
+	Python	www.python.org
+	wxPython	www.wxpython.org
+
+报告BUG
+============
+如果你发现有BUG或有任何问题的话请发送Email至pro711@gmail.com。
+
+关于作者
+============
+pro711，陈涛，现就读于复旦大学附属中学。
+我对C/C++，Linux，Python都很感兴趣，欢迎来电子邮件与我探讨问题。
+
