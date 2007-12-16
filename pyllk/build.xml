@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+     2007-12-16 上午07:40:45
+
+     project:pyllk
+     description:python实现的连连看
+
+     QXO
+     ====================================================================== -->
+<project name="pyllk" default="PyInstaller2exe">
+	<description>
+		python实现的连连看
+    </description>
+
+	<property file="build.properties" />
+	<property name="dist" value="dist">
+	</property>
+	<property name="build" value="build">
+	</property>
+
+
+	<property name="etc" value="etc" />
+
+	<!-- =================================
+          target: py2exe
+         ================================= -->
+	<target name="PyInstaller2exe" depends="init" description="--> description">
+
+
+
+		<exec executable="cmd">
+			<arg value="/c" />
+			<arg value="${pyinstaller_home}/Makespec.py" />
+			<arg value="-D" />
+			<arg value="-w" />
+			<arg value="--icon=${etc}/logo.png" />
+			<arg value="-p" />
+			<arg value="${build}/src" />
+			<arg value="-o" />
+			<arg value="${build}/" />
+			<arg value="${build}/src/pyllk.py" />
+		</exec>
+
+		<exec executable="cmd">
+			<arg value="/c" />
+			<arg value="${pyinstaller_home}/Build.py" />
+			<arg value="${build}/pyllk.spec" />
+		</exec>
+
+		<antcall target="copyResource2Dist" />
+		<antcall target="toZip" />
+
+
+	</target>
+
+	<target name="copyResource2Dist">
+
+		<copy todir="${build}/distpyllk">
+			<fileset dir="src" excludes="**/*.py">
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="toZip">
+		<zip destfile="${dist}/pyllk-window-${version}.zip" basedir="${build}/distpyllk" />
+	</target>
+
+	<target name="cx_Freeze2exe" depends="init" description="--> description">
+
+		<exec executable="${cx_Freeze_home}/FreezePython">
+			<arg value="-O" />
+
+			<!-- 加了bash-binary后就可以只运行前台的界面了,不过如果程序出错,会弹出一个错误对话框,说找不到traceback模块 -->
+			<arg value="--base-binary=Win32GUI.exe" />
+
+			<arg value="--install-dir" />
+			<arg value="${build}/distpyllk" />
+			<arg value="${build}/src/pyllk.py" />
+		</exec>
+		<antcall target="copyResource2Dist" />
+		<antcall target="toZip" />
+	</target>
+
+
+	<!-- - - - - - - - - - - - - - - - - -
+          target: init
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+		<copy todir="${build}/src">
+			<fileset dir="src" includes="**/*.py">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}">
+		</delete>
+
+	</target>
+</project>
