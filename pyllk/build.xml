@@ -28,12 +28,12 @@
 
 
 
-		<exec executable="cmd">
+		<exec executable="cmd" failonerror="true">
 			<arg value="/c" />
 			<arg value="${pyinstaller_home}/Makespec.py" />
 			<arg value="-D" />
 			<arg value="-w" />
-			<arg value="--icon=${etc}/logo.png" />
+			<arg value="--icon=${etc}/logo.ico" />
 			<arg value="-p" />
 			<arg value="${build}/src" />
 			<arg value="-o" />
@@ -41,7 +41,7 @@
 			<arg value="${build}/src/pyllk.py" />
 		</exec>
 
-		<exec executable="cmd">
+		<exec executable="cmd" failonerror="true">
 			<arg value="/c" />
 			<arg value="${pyinstaller_home}/Build.py" />
 			<arg value="${build}/pyllk.spec" />
