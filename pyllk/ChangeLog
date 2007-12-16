@@ -2,6 +2,9 @@ Pyllk---Python Lian Lian Kan
 
 ChangeLog
 =========
+2007-12-16
+加入打包发布脚本,发布包目前暂时只能用于window平台
+
 2007-07-27
 Ver 0.1
 Fixed a bug in declaring the llkgame class.
