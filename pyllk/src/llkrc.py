@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -23,11 +24,11 @@ import re
 
 def get_image_path(name):
     '''Returns the full path of a picture used in the game.'''
-    
+
     prefix = 'llk_classic/'
     pattern = re.compile('^\d')     #beginning with a digit
     name = str(name)    #convert to string if name is a number
-    
+
     if re.search(pattern, name):
         num = 1
     else:
@@ -38,7 +39,7 @@ def get_image_path(name):
         fullname = prefix+ name # + '.png'
 ##    print fullname
     return fullname
-        
+
 
 def getPyllkIcon():
     icon = EmptyIcon()

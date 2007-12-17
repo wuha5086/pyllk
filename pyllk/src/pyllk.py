@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:        pyllk.py
-# Purpose:    A python implementation of the popular game Lian Lian Kan 
+# Purpose:    A python implementation of the popular game Lian Lian Kan
 #
 # Author:      <pro>
 #
@@ -26,6 +27,7 @@
 
 '''
 Python implementation of the popular game LianLianKan.
+主程序
 '''
 ##import wxversion
 ##wxversion.select('2.8')
@@ -46,7 +48,7 @@ class PyllkAbout(xrcABOUT):
     def OnClose(self, event):
 ##        print 'Event Triggered'
         self.Close()
-    
+
     def OnThanks(self, event):
         thanks = xrcTHANKS(self)
         thanks.ShowModal()
@@ -73,37 +75,37 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.Bind(wx.EVT_MENU, self.OnPause, id=xrc.XRCID('MENUPAUSEPROCEED'))
         self.Bind(EVT_UPDATE_INFOBAR, self.update_info, id = self.board.GetId())
         self.SetIcon(getPyllkIcon())
-    
+
     def OnClose(self, event):
         '''Exit the game.'''
         print 'Exit.'
         self.Close()
-    
+
     def OnGiveup(self, event):
         '''Give up the game.'''
         self.board.game_give_up()
         self.MENUGIVEUP.Enable(False)
-    
+
     def OnHint(self, event):
         '''Give player a hint.'''
         self.board.game_hint()
-    
+
     def OnShuffle(self, event):
         '''Shuffle cards.'''
         self.board.game_shuffle()
-    
+
     def OnPause(self, event):
         '''Pause the game.'''
         self.board.game_pause()
-    
+
     def OnAbout(self, event):
         about = PyllkAbout(self)
         about.ShowModal()
         about.Fit()
-        
+
     def OnHowToPlay(self, event):
         PyllkHowToPlay(self).ShowModal()
-    
+
     def game_start(self, event):
         '''start the game'''
         #print 'event game start'
@@ -118,7 +120,7 @@ class PyllkMainFrame(xrcMAINFRAME):
             self.board.game_init()
             self.board.game_begin(3)
         self.MENUGIVEUP.Enable(True)
-    
+
     def update_info(self, event):
         '''update the status label and progress bar'''
         self.LABEL_DIFF.SetLabel(event.info[0])
@@ -128,13 +130,13 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.LABEL_LIFE.SetLabel(event.info[4])
         self.LABEL_HINT.SetLabel(event.info[5])
         self.GAUGE_TIME.SetValue(event.info[6])
-        
+
 
 def main():
     app = wx.App()
     PyllkMainFrame(None).Show()
     app.MainLoop()
-    
+
 if __name__ == '__main__':
     main()
 

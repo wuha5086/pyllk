@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:        llkgame.py
-# Purpose:    A python implementation of the popular game Lian Lian Kan 
+# Purpose:    A python implementation of the popular game Lian Lian Kan
 #                   This is a general llk board.
 #
 # Author:      <pro>
@@ -38,7 +39,7 @@ class llkgame:
     ALGORITHM_GAME_STOP = 1
     ALGORITHM_GAME_RUN = 2
     ALGORITHM_GAME_PAUSE = 3
-    
+
     def __init__(self):
         self.difficulty = 0
         self.level = 0
@@ -51,12 +52,12 @@ class llkgame:
         self.data = []
         for i in range(10):
             self.data.append([0]*17)      #0:no pic,1: pic1,
-    
+
     def print_data(self):
         '''Print data, for test purposes'''
         for i in range(10):
             print self.data[i]
-    
+
     def game_begin(self, data):
         #get a random order of the card image list
         if self.status == llkgame.ALGORITHM_GAME_STOP:
@@ -97,30 +98,30 @@ class llkgame:
             return True
         else:
             return False
-    
+
     def init_data(self):
         picture_type = 36
         i =128
         j = 128
         picture_type_tuple = (21, 25, 32)
         j_tuple = (72, 98, 128)
-        
+
         picture_type = picture_type_tuple[self.difficulty]
         j = j_tuple[self.difficulty]
-        
+
         picture_list = list()
         for i in range(j):
             picture_list.append(i/4+1)
-        
+
         while len(picture_list) !=0:
             i = random.randint(0, j-1)
             self.data[(j-1)/self.col][(j-1)%self.col] = picture_list[i]
             del picture_list[i]
             j-=1
-        
+
     def can_direct_link(self, p1, p2):
         '''
-        Test if p1 and p2 can direct link or not. that is to say,the points between p1 and p2 
+        Test if p1 and p2 can direct link or not. that is to say,the points between p1 and p2
         at the same row or column are all empty.
         BE CARE:this function do not warrant p1 and p2 have the same type of image.
         '''
@@ -149,7 +150,7 @@ class llkgame:
                 return True
         else:
             return False
-            
+
     def can_link(self, p1, p2, ptlist):
         '''
         test if p1 and p2 can link.
@@ -158,13 +159,13 @@ class llkgame:
         '''
         if self.data[p1.x][p1.y] != self.data[p2.x][p2.y]:
             return False
-        if self.can_direct_link(p1, p2) and (ptlist is None): ##!Note! None! or 0-length  #can direct link,no need to return the turn points. 
+        if self.can_direct_link(p1, p2) and (ptlist is None): ##!Note! None! or 0-length  #can direct link,no need to return the turn points.
             return True
         else:
             #get adjacent empty points at x and y direction,judge point by point
             p1_list = self.get_points(p1)
             p2_list = self.get_points(p2)
-            
+
             if(len(p1_list) == 0 or len(p2_list) == 0):
                 return False
             else:
@@ -187,7 +188,7 @@ class llkgame:
         form a single list,and return it.
         '''
         p_list = []
-        
+
         for i in range(p.y+1, self.col+1):
             if i < self.col and self.data[p.x][i] > 0:
                 break
@@ -199,7 +200,7 @@ class llkgame:
                 break
             else:
                 p_list.append(Point(p.x, i))
-                
+
         for i in range(p.x+1, self.row+1):
             if i < self.row and self.data[i][p.y] > 0:
                 break
@@ -211,7 +212,7 @@ class llkgame:
                 break
             else:
                 p_list.append(Point(i, p.y))
-        
+
         return p_list
 
     def link(self, p1, p2):
@@ -219,7 +220,7 @@ class llkgame:
         self.data[p1.x][p1.y] = 0
         self.data[p2.x][p2.y] = 0
         self.score += 20    #add score
-        
+
     def game_no_solution(self):
         '''
         test if the current game situation have solution.
@@ -246,7 +247,7 @@ class llkgame:
             return 1
         else:
             return 2
-    
+
     def game_shuffle(self):
         '''
         shuffle cards.
@@ -261,17 +262,17 @@ class llkgame:
             for j in range(0, self.col):
                 if self.data[i][j] > 0:
                     picture_list.append(self.data[i][j])
-        
+
         for i in range(0, self.row):
             for j in range(0, self.col):
                 if self.data[i][j] > 0:
                     m = random.randint(0, len(picture_list)-1)
                     self.data[i][j] = picture_list[m]
                     del picture_list[m]
-        
+
         if self.game_no_solution() == 1:
             self.game_shuffle()
-    
+
     def game_change(self, p1, p2):
         foo_list = [self.data_change_0,    #No Change
                     self.data_change_1,    #Move Down
@@ -286,7 +287,7 @@ class llkgame:
                     self.data_change_10    #Centralize
                     ]
         foo_list[self.level](p1, p2)
-    
+
     def game_next_level(self):
         '''Switch to the next level.'''
         if self.level >= 10:    #11 Levels,from 0 to 10
@@ -303,11 +304,11 @@ class llkgame:
             self.score += self.hint * 50
             self.init_data()
             return True
-    
+
     def data_change_0(self, p1, p2):
         '''No Change, do nothing'''
         pass    #do nothing
-    
+
     def data_change_1(self, p1, p2):
         '''Move Down'''
         for i in range(p1.x, 0, -1):
@@ -320,7 +321,7 @@ class llkgame:
         for i in range(i, 0, -1):
             self.data[i][p2.y] = self.data[i-1][p2.y]
         self.data[0][p2.y] = 0
-    
+
     def data_change_2(self, p1, p2):
         '''Move Left'''
         #BE CARE: the last column is not in the for loop.
@@ -333,7 +334,7 @@ class llkgame:
         for j in range(j, self.col-1):
             self.data[p2.x][j] = self.data[p2.x][j+1]
         self.data[p2.x][self.col-1] = 0
-    
+
     def data_change_3(self, p1, p2):
         '''Up and Down Separate'''
         tmp_start = p1.x
@@ -347,7 +348,7 @@ class llkgame:
                 self.data[i][p1.y] = self.data[i+sign][p1.y]
                 self.data[i+sign][p1.y] =0
                 i += sign
-        
+
         tmp_start = p2.x
         tmp_end = self.row/2
         if tmp_start < tmp_end:
@@ -366,7 +367,7 @@ class llkgame:
                 self.data[i][p2.y] = self.data[i+sign][p2.y]
                 self.data[i+sign][p2.y] = 0
                 i += sign
-    
+
     def data_change_4(self, p1, p2):
         '''Left and Right Separate'''
         tmp_start = p1.y
@@ -380,7 +381,7 @@ class llkgame:
                 self.data[p1.x][j] = self.data[p1.x][j+sign]
                 self.data[p1.x][j+sign] =0
                 j += sign
-        
+
         tmp_start = p2.y
         tmp_end = self.col/2
         if tmp_start < tmp_end:
@@ -399,7 +400,7 @@ class llkgame:
                 self.data[p2.x][j] = self.data[p2.x][j+sign]
                 self.data[p2.x][j+sign] = 0
                 j += sign
-    
+
     def data_change_5(self, p1, p2):
         '''Up and Down Converge'''
         tmp_start = p1.x
@@ -433,7 +434,7 @@ class llkgame:
                 self.data[i][p2.y] = self.data[i+sign][p2.y]
                 self.data[i+sign][p2.y] = 0
                 i += sign
-    
+
     def data_change_6(self, p1, p2):
         '''Left and Right Converge'''
         tmp_start = p1.y
@@ -467,7 +468,7 @@ class llkgame:
                 self.data[p2.x][j] = self.data[p2.x][j+sign]
                 self.data[p2.x][j+sign] = 0 #this sentence can be write outside of while loop in some way
                 j += sign
-    
+
     def data_change_7(self, p1, p2):
         '''Up leftward,Down rightward'''
         if p1.x < self.row/2:   #leftward
@@ -491,7 +492,7 @@ class llkgame:
             for j in range(j, 0, -1):
                 self.data[p2.x][j] = self.data[p2.x][j-1]
             self.data[p2.x][0] = 0
-    
+
     def data_change_8(self, p1, p2):
         '''Left downward,Right upward'''
         if p1.y < self.col/2:   #downward
@@ -515,7 +516,7 @@ class llkgame:
             for i in range(i, self.row-1):
                 self.data[i][p2.y] = self.data[i+1][p2.y]
             self.data[self.row-1][p2.y] = 0
-    
+
     def data_change_9(self, p1, p2):
         '''
         Disperse from Center
@@ -534,7 +535,7 @@ class llkgame:
             sign = -1
         while self.data[p3.x][p3.y] != 0:
             p3.y += sign
-        
+
         p4.x = p2.x
         if p2.y < self.col/2:
             p4.y = 0
@@ -544,18 +545,18 @@ class llkgame:
             sign = -1
         while self.data[p4.x][p4.y] != 0:
             p4.y += sign
-        
+
         #modify in case of special situation
         if p1.x == p2.x:
             if p1.y < self.col/2 and p2.y < self.col/2:
                 p4.y = p3.y + 1
             elif p1.y >= self.col/2 and p2.y >= self.col/2:
                 p4.y = p3.y - 1
-        
+
         #p3,p4 are the new position of p1,p2 after 'left and right seperate',
         #do 'up and down seperate' on them
         self.data_change_3(p3, p4)
-    
+
     def data_change_10(self, p1, p2):
         '''
         Centralize
@@ -574,7 +575,7 @@ class llkgame:
             sign = 1
         while self.data[p3.x][p3.y] != 0:
             p3.y += sign
-        
+
         p4.x = p2.x
         if p2.y < self.col/2:
             p4.y = self.col/2 -1
@@ -584,14 +585,14 @@ class llkgame:
             sign = 1
         while self.data[p4.x][p4.y] != 0:
             p4.y += sign
-        
+
         #modify in case of special situation
         if p1.x == p2.x:
             if p1.y < self.col/2 and p2.y < self.col/2:
                 p4.y = p3.y - 1
             elif p1.y >= self.col/2 and p2.y >= self.col/2:
                 p4.y = p3.y + 1
-        
+
         #p3,p4 are the new position of p1,p2 after 'Left Right Converge',
         #do 'Up Down Converge' on them
         self.data_change_5(p3, p4)
