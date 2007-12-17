@@ -45,7 +45,7 @@
         <object class="separator"/>
         <object class="wxMenuItem" name="MENUQUIT">
           <label>退出(&amp;Q)</label>
-          <bitmap stock_id="wxART_QUIT"></bitmap>
+          <bitmap stock_id="wxART_QUIT"/>
           <accel>Ctrl+Q</accel>
         </object>
       </object>
@@ -80,11 +80,11 @@
         <label>关于(&amp;A)</label>
         <object class="wxMenuItem" name="MENUITEM_HOWTOPLAY">
           <label>游戏规则(&amp;H)</label>
-          <bitmap stock_id="wxART_QUESTION"></bitmap>
+          <bitmap stock_id="wxART_QUESTION"/>
         </object>
         <object class="wxMenuItem" name="MENUITEM_ABOUT">
           <label>关于(&amp;A)</label>
-          <bitmap stock_id="wxART_INFORMATION"></bitmap>
+          <bitmap stock_id="wxART_INFORMATION"/>
         </object>
       </object>
     </object>
@@ -149,7 +149,7 @@
       <orient>wxHORIZONTAL</orient>
       <object class="sizeritem">
         <object class="wxStaticBitmap">
-          <bitmap stock_id="wxART_INFORMATION"></bitmap>
+          <bitmap stock_id="wxART_INFORMATION"/>
           <size>48,48</size>
         </object>
         <flag>wxTOP</flag>
@@ -160,27 +160,13 @@
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
             <object class="wxStaticText">
-              <label>\tPython连连看 0.1\n\tpro711制作\t pro711@gmail.com\t复旦大学附属中学\t 20070203\n</label>
+              <label>\tPython连连看 0.1\n\t 制作\t QXO qxodream@gmail.com \n\t原作者\t pro711@gmail.com</label>
               <style>wxALIGN_LEFT</style>
             </object>
             <flag>wxALL|wxEXPAND</flag>
             <border>5</border>
           </object>
-          <object class="sizeritem">
-            <object class="wxStaticText">
-              <label>纪念我们永远的二班！</label>
-              <style>wxALIGN_CENTRE</style>
-              <font>
-                <size>12</size>
-                <family>default</family>
-                <style>normal</style>
-                <weight>normal</weight>
-                <underlined>0</underlined>
-              </font>
-            </object>
-            <flag>wxALIGN_CENTRE</flag>
-            <border>5</border>
-          </object>
+          
           <object class="sizeritem">
             <object class="wxStaticText">
               <label>  This program is free software; you can redistribute it and/or modify
@@ -202,7 +188,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
-              <label>本软件使用Python和wxPython开发。\n希望能与大家共同学习，共同提高！\n</label>
+              <label>本软件使用Python和wxPython开发。\n希望能与大家共同学习，共同提高！\n最新版本请到http://code.google.com/p/pyllk下载</label>
             </object>
             <flag>wxALL|wxALIGN_CENTRE</flag>
             <border>3</border>
