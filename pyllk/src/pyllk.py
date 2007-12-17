@@ -123,13 +123,14 @@ class PyllkMainFrame(xrcMAINFRAME):
 
     def update_info(self, event):
         '''update the status label and progress bar'''
-        self.LABEL_DIFF.SetLabel(event.info[0])
-        self.LABEL_LEVEL.SetLabel(event.info[1])
-        self.LABEL_CHANGE.SetLabel(event.info[2])
-        self.LABEL_SCORE.SetLabel(event.info[3])
-        self.LABEL_LIFE.SetLabel(event.info[4])
-        self.LABEL_HINT.SetLabel(event.info[5])
-        self.GAUGE_TIME.SetValue(event.info[6])
+        info = event.info
+        self.LABEL_DIFF.SetLabel(info.diff)
+        self.LABEL_LEVEL.SetLabel(info.level)
+        self.LABEL_CHANGE.SetLabel(info.change)
+        self.LABEL_SCORE.SetLabel(info.score)
+        self.LABEL_LIFE.SetLabel(info.life)
+        self.LABEL_HINT.SetLabel(info.hint)
+        self.GAUGE_TIME.SetValue(info.time)
 
 
 def main():

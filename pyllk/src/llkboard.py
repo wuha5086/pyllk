@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #-----------------------------------------------------------------------------
 # Name:        llkboard.py
-# Purpose:    A python implementation of the popular game Lian Lian Kan 
+# Purpose:    A python implementation of the popular game Lian Lian Kan
 #                   This is a general llk board.
 #
 # Author:      <pro>
@@ -42,16 +42,30 @@ from llkgame import *
 myEVT_UPDATE_INFOBAR = wx.NewEventType()
 EVT_UPDATE_INFOBAR = wx.PyEventBinder(myEVT_UPDATE_INFOBAR, 1)
 
+
+class GameStatus():
+    '''
+     此代表当前游戏的状态
+    '''
+    def __init__(self, diff="",level=0,life=0,hint=0,change="",time=0,score=0):
+         self.diff  = diff    #难度
+         self.level = level   #等级
+         self.life  = life    #生命
+         self.hint  = hint    #提示
+         self.change= change  #变化
+         self.time  = time    #时间
+         self.score = score   #成绩
+
 class MyEvent(wx.PyCommandEvent):
     '''Custom event class
     In this case, it is used to deliver info to the father window to update the info bar.'''
     def __init__(self, evtType, id):
         wx.PyCommandEvent.__init__(self, evtType, id)
         self.info = None
-    
+
     def SetMyVal(self, info):
         self.info = info
-    
+
     def GetMyVal(self):
         return self.info
 
@@ -68,7 +82,7 @@ class LlkBoard(wx.Window):
     UI_BACK_BORDER_2 = 6
     UI_IMAGE_SIZE = 32
     MAX_PATH_LENGTH = 300
-    
+
     def __init__(self, parent, ID, pos = (0, 0), callback = None):
         '''Initialize LlkBoard
         Load resources needed to run the game
@@ -89,11 +103,11 @@ class LlkBoard(wx.Window):
         # and the refresh event
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_TIMER, self.OnTimer)
-        
+
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)  #for test
-        
+
         self.game = llkgame()   #create game instance
-        
+
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
         size = self.GetClientSize()
@@ -101,7 +115,7 @@ class LlkBoard(wx.Window):
         dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
         dc.SetBackground(wx.Brush('BLACK'))
         dc.Clear()
-    
+
 
     def OnLeftDown(self, event):
         """Called when the left mouse button is pressed"""
@@ -117,7 +131,7 @@ class LlkBoard(wx.Window):
             pos = event.GetPosition()
 ##            if pos.x < 20 and pos.y < 20:
 ##                self.game_next_level()      #debug--next level
-            
+
             if (pos.x > LlkBoard.UI_FIXED_START_DRAW_LEFT - \
             self.game.difficulty*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1) and
             pos.x < LlkBoard.UI_FIXED_START_DRAW_LEFT +\
@@ -184,21 +198,21 @@ class LlkBoard(wx.Window):
             return True
         else:
             return False
-    
+
     def OnRightUp(self, event):
         '''Called when the right mouse button is released'''
         if self.game.status == self.game.ALGORITHM_GAME_RUN:
 ##            pos = event.GetPosition()
 ##            if pos.x < 20 and pos.y < 20:   #only for test
 ##                self.game_over(0)      #debug--game over
-            
+
             if self.ui_point1.x > -1:   #cancel the selected status
                 self.redraw_images()
                 self.ui_point1 = wx.Point(-1, -1)
                 thread.start_new_thread(self.play, ('Cancel.wav',))
             return True
         return False
-        
+
     def OnMotion(self, event):
         """
         Called when the mouse is in motion.  If the left button is
@@ -215,7 +229,7 @@ class LlkBoard(wx.Window):
 ##            self.pos = pos
 ##            dc.DrawLine(pos.x, pos.y, pos.x+20, pos.y+20)
             dc.DrawPoint(pos.x, pos.y)
-    
+
     def OnPaint(self, event):
         """
         Called when the window is exposed.
@@ -225,23 +239,23 @@ class LlkBoard(wx.Window):
         # deleted.  Since we don't need to draw anything else
         # here that's all there is to it.
         dc = wx.BufferedPaintDC(self, self.buffer)
-    
+
     def OnTimer(self, event):
         '''Timer event handler.'''
         self.progress_timeout(0)    #reduce the time normally
-    
+
     def game_init(self):
         '''Init, ready to have fun!'''
 ##        self.game = llkgame()
         self.game.__init__()        #TODO:!NOTICE! problems with re-initialization.improve later
-        self.time_remain = 0        
+        self.time_remain = 0
         self.ui_point1 = wx.Point(-1, -1)
         self.ui_point2 = wx.Point(-1, -1)
         self.refresh_top()
         self.DrawMainBack()
         return True
         #need polishing
-    
+
     def get_back(self):
         '''Get a background picture.'''
         rect = self.GetClientRect() #get rect
@@ -260,7 +274,7 @@ class LlkBoard(wx.Window):
         clip = wx.Rect((bw-sizew)/2, (bh-sizeh)/2, sizew, sizeh)
         self.bg = bg.GetSubBitmap(clip)
         self.bgpos = wx.Point((clipw-sizew)/2,(cliph-sizeh)/2)
-    
+
     def load_resource(self):
         '''
         Load resources needed for playing the game.
@@ -279,29 +293,29 @@ class LlkBoard(wx.Window):
 ##        clip = wx.Rect((bw-sizew)/2, (bh-sizeh)/2, sizew, sizeh)
 ##        self.bg = bg.GetSubBitmap(clip)
 ##        self.bgpos = wx.Point((clipw-sizew)/2,(cliph-sizeh)/2)
-        
+
         #get a bitmap for each cardimage
         self.cardimages = []
         img = wx.Bitmap(get_image_path('cardimages.png'))
         for i in range(0, LlkBoard.UI_IMAGE_SIZE):
             self.cardimages.append(img.GetSubBitmap(wx.Rect(32*i, 0, 32, 32)))
         del img #of no use from now on, delete it
-        
+
         #get a bitmap for each cardback
         self.cardbacks = []
         img = wx.Bitmap(get_image_path('cardbacks.png'))
         for i in range(0, 6):   #TODO: convert these to a variable later
             self.cardbacks.append(img.GetSubBitmap(wx.Rect(0, 56*i, 46, 56)))
         del img #of no use from now, delete it
-        
+
         self.vertical = wx.Bitmap(get_image_path('vertical.png'))
         self.horizon = wx.Bitmap(get_image_path('horizon.png'))
         self.pause = wx.Bitmap(get_image_path('pause.jpg'))
         self.mainback = wx.Bitmap(get_image_path('mainback.jpg'))   #get initial back image
         self.cardback_choice = random.randint(0, 5)
-        
+
         return True #TODO: Needs polishing
-    
+
     def game_next_level(self):
         '''
         Next Levels
@@ -310,7 +324,7 @@ class LlkBoard(wx.Window):
         this difficulty,then over the game,waiting for player to choose another difficulty.
         '''
         #TODO: change background image
-        self.timer.Stop()   
+        self.timer.Stop()
         if self.game.game_next_level():
             thread.start_new_thread(self.play, ('Win.wav',))
             self.get_back()
@@ -327,7 +341,7 @@ class LlkBoard(wx.Window):
             self.timer.Start()
         else:
             self.game_over(True)
-    
+
     def game_over(self, success):
         '''Game Over.'''
         self.timer.Stop()
@@ -342,19 +356,19 @@ class LlkBoard(wx.Window):
             #popup dialog window
             msg = u'胜败乃兵家常事,大侠重新来过吧!'
             type = wx.ICON_WARNING
-        
+
         if success:
             thread.start_new_thread(self.play, ('Win.wav',))
         else:
             thread.start_new_thread(self.play, ('GameOver.wav',))
 #            pass
-        
+
         dlg = wx.MessageDialog(self, msg, u'Message', wx.OK | type)
         dlg.ShowModal()
         dlg.Destroy()
-        
+
         self.game_init()
-    
+
     def game_give_up(self):
         '''Function dealing with game giveup, and game over'''
         #stop the timer
@@ -363,7 +377,7 @@ class LlkBoard(wx.Window):
 	self.get_back()
         if self.game.status != self.game.ALGORITHM_GAME_STOP:
             self.game_init()
-    
+
     def DrawMainBack(self):
         '''Draw the initial back image.'''
         (width, height) = self.mainback.GetSize().Get()
@@ -372,7 +386,7 @@ class LlkBoard(wx.Window):
         dc.SetBackground(wx.Brush('BLACK'))
         dc.Clear()  #clear the dc first
         dc.DrawBitmap(self.mainback, (cw-width)/2, (ch-height)/2)
-    
+
     def DrawBG(self, choice):
         '''Draw the background picture of the drawingarea'''
         #TODO: choice of user set not to draw background pictures
@@ -402,7 +416,7 @@ class LlkBoard(wx.Window):
         useMask=True)
         del img
         #Draw card's front image
-        dc.DrawBitmap(self.cardimages[self.game.data[p1.x][p1.y] - 1], 
+        dc.DrawBitmap(self.cardimages[self.game.data[p1.x][p1.y] - 1],
         LlkBoard.UI_FIXED_START_DRAW_LEFT + (p1.y - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
         (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
         LlkBoard.UI_FIXED_START_DRAW_TOP + p1.x*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
@@ -422,14 +436,14 @@ class LlkBoard(wx.Window):
             useMask=True)
             del img
             #Draw card's front image
-            dc.DrawBitmap(self.cardimages[self.game.data[p2.x][p2.y] - 1], 
+            dc.DrawBitmap(self.cardimages[self.game.data[p2.x][p2.y] - 1],
             LlkBoard.UI_FIXED_START_DRAW_LEFT + (p2.y - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
             (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
             LlkBoard.UI_FIXED_START_DRAW_TOP + p2.x*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
             (LlkBoard.UI_BACK_HEIGHT-LlkBoard.UI_BACK_BORDER_2-LlkBoard.UI_IMAGE_SIZE)/2,
             useMask=True)
 ##        self.OnPaint(None)
-    
+
     def redraw_images(self):
         '''Redraw all card images according to data in llkgame'''
 ##        self.DrawBG(1)  #redraw background picture
@@ -443,17 +457,17 @@ class LlkBoard(wx.Window):
         #according to the data in the algorithm_game,and selected position, redraw all card images
         #modified from ui_game_begin function
 ##        dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
-        
+
         for i in range(0, self.game.row):
             for j in range(0, self.game.col):
                 if self.game.data[i][j] > 0:
                     #Draw card back images
-                    dc.DrawBitmap(self.cardbacks[self.cardback_choice], 
+                    dc.DrawBitmap(self.cardbacks[self.cardback_choice],
                     LlkBoard.UI_FIXED_START_DRAW_LEFT + (j - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1),
                     LlkBoard.UI_FIXED_START_DRAW_TOP + i*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2),
                     useMask=True)
                     #Draw card front image
-                    dc.DrawBitmap(self.cardimages[self.game.data[i][j] - 1], 
+                    dc.DrawBitmap(self.cardimages[self.game.data[i][j] - 1],
                     LlkBoard.UI_FIXED_START_DRAW_LEFT + (j - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
                     (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
                     LlkBoard.UI_FIXED_START_DRAW_TOP + i*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
@@ -462,7 +476,7 @@ class LlkBoard(wx.Window):
 ##        print 'redraw images done'
         #redraw the client area
 ##        self.OnPaint(None)  #TODO: correct or not?
-    
+
     def add_line(self, p1, p2, link_line):
         '''according to the points input, get the link points between the two points
         and add these points to a list
@@ -501,7 +515,7 @@ class LlkBoard(wx.Window):
                     'frame':0
                     }
                     link_line.append(dict)
-    
+
     def link(self, p1, p2):
         '''Link two cards'''
         link_line = []
@@ -518,7 +532,7 @@ class LlkBoard(wx.Window):
 	#self.Refresh(rect = self.rect)	#refresh the window and so the link effect will take place
 	self.Update()
 ##        time.sleep(0.2)     #sleep 0.2 second after the link effect
-    
+
     def draw_line(self, link_line):
         '''Dealing with the link line effect when delete cards.'''
         dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
@@ -549,7 +563,7 @@ class LlkBoard(wx.Window):
                 useMask=True)
         #delete the list and free data
         del link_line
-    
+
     def game_change(self, p1, p2):
         '''
         Change the image cards' position according to the current level value
@@ -567,7 +581,7 @@ class LlkBoard(wx.Window):
         else:
             return 200
 
-    
+
     def progress_timeout(self, value):
         '''Dealing with time stuff.'''
         if value == 9999:   #full fill the time
@@ -588,7 +602,7 @@ class LlkBoard(wx.Window):
                 else:
                     self.game_over(False)
                     return False
-    
+
     def game_hint(self):
         '''Give player a hint.'''
         if self.game.status != self.game.ALGORITHM_GAME_RUN:
@@ -611,7 +625,7 @@ class LlkBoard(wx.Window):
                                     self.replace_image(p1, p2)
                                     thread.start_new_thread(self.play, ('Hint.wav',))
                                     return
-    
+
     def game_shuffle(self):
         '''Shuffle cards.'''
         if self.game.status != self.game.ALGORITHM_GAME_RUN:
@@ -628,7 +642,7 @@ class LlkBoard(wx.Window):
             self.ui_point1 = wx.Point(-1, -1)
             thread.start_new_thread(self.play, ('Shuffle.wav',))
             self.timer.Start()
-    
+
     def game_pause(self):
         '''Pause,hide the card images'''
 ##        print 'paused'
@@ -647,16 +661,16 @@ class LlkBoard(wx.Window):
             self.redraw_images()
             self.timer.Start()
             self.game.status = self.game.ALGORITHM_GAME_RUN
-    
+
     def refresh_top(self):
         '''Refresh the information shown on the top.'''
         if self.game.status != self.game.ALGORITHM_GAME_STOP:
             t_diff = (u'难度:简单', u'难度:一般', u'难度:困难')
             diff = t_diff[self.game.difficulty]
             lev = u'等级:%d'%self.game.level
-            t_change = (u'无变化', u'向下', u' 向左', u'上下分离', u'左右分离', 
+            t_change = (u'无变化', u'向下', u' 向左', u'上下分离', u'左右分离',
                 u'上下集中', u'左右集中', u'上左下右', u'左下右上', u'向外扩散', u'向内集中')
-            change = t_change[self.game.level]
+            change =u'变化类型:'+ t_change[self.game.level]
             score = u'%d'%self.game.score
             life = u'生命:%d'%self.game.life
             hint = u'提示:%d'%self.game.hint
@@ -670,13 +684,15 @@ class LlkBoard(wx.Window):
             life = u'生命:'
             hint = u'提示:'
             time = 0
-        info = (diff, lev, change, score, life, hint, time)
-        
+
+        info = GameStatus(diff=diff, level=lev, change=change, score=score, life=life, hint=hint, time=time)
+
+
         evt = MyEvent(myEVT_UPDATE_INFOBAR, self.GetId())
         evt. SetMyVal(info)
         self.GetEventHandler().ProcessEvent(evt)    #notice
         #event.Skip()
-    
+
     def play(self, file):
         '''Play a sound.'''
 ##        print 'before play...'
@@ -686,8 +702,8 @@ class LlkBoard(wx.Window):
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
 ##        print '...after play'
-        
-    
+
+
     def game_begin(self, data):
         '''The UI function dealing with the game start process.
         data: stand for game diffictulty, but it is based on 1,and the game difficulty is based on 0,BE CARE!!!
