@@ -35,6 +35,7 @@ class GameConf():
 
     def __init__(self):
         self.chessTypeList = GameConf.getDictListByIni(GameConf.CHESS_CONFIG_FILE)
+        self.encoding = os.sys.getfilesystemencoding()
 
     if __name__ == '__main__':
         gconf = GameConf();

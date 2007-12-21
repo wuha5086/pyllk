@@ -38,6 +38,7 @@ from pyllk_xrc import *
 from llkboard import LlkBoard
 from llkboard import EVT_UPDATE_INFOBAR
 from llkrc import *
+import GameConf
 
 class PyllkAbout(xrcABOUT):
     def __init__(self, parent):
@@ -61,6 +62,56 @@ class PyllkHowToPlay(xrcHOWTOPLAY):
 class PyllkMainFrame(xrcMAINFRAME):
     def __init__(self, parent):
         xrcMAINFRAME.__init__(self, parent)
+        self.gconf = GameConf.GameConf();
+
+                # Define variables for the controls
+        self.MAINMENUBAR = self.GetMenuBar()
+        self.MENU_GAME = xrc.XRCCTRL(self, "MENU_GAME")
+        self.SINGLEGAME = xrc.XRCCTRL(self, "SINGLEGAME")
+        self.MENUEASY = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUEASY"))
+        self.MENUNORMAL = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUNORMAL"))
+        self.MENUHARD = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUHARD"))
+        self.MENURESUME = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENURESUME"))
+        self.TWOPLAYERGAME = xrc.XRCCTRL(self, "TWOPLAYERGAME")
+        self.NETPLAYGAME = xrc.XRCCTRL(self, "NETPLAYGAME")
+        self.MENUGIVEUP = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUGIVEUP"))
+        self.MENUQUIT = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUQUIT"))
+        self.MENU_FUNC = xrc.XRCCTRL(self, "MENU_FUNC")
+        self.MENUHINT = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUHINT"))
+        self.MENUSHUFFLE = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUSHUFFLE"))
+        self.MENUPAUSEPROCEED = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUPAUSEPROCEED"))
+        self.MENUHIDE = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUHIDE"))
+        self.MENU_CONF = xrc.XRCCTRL(self, "MENU_CONF")
+        self.MENU_MARK = xrc.XRCCTRL(self, "MENU_MARK")
+        self.MENU_ABOUT = xrc.XRCCTRL(self, "MENU_ABOUT")
+        self.MENUITEM_HOWTOPLAY = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUITEM_HOWTOPLAY"))
+        self.MENUITEM_ABOUT = self.MAINMENUBAR.FindItemById(xrc.XRCID("MENUITEM_ABOUT"))
+        self.LABEL_DIFF = xrc.XRCCTRL(self, "LABEL_DIFF")
+        self.LABEL_LEVEL = xrc.XRCCTRL(self, "LABEL_LEVEL")
+        self.LABEL_LIFE = xrc.XRCCTRL(self, "LABEL_LIFE")
+        self.LABEL_HINT = xrc.XRCCTRL(self, "LABEL_HINT")
+        self.LABEL_CHANGE = xrc.XRCCTRL(self, "LABEL_CHANGE")
+        self.GAUGE_TIME = xrc.XRCCTRL(self, "GAUGE_TIME")
+        self.LABEL_SCORE = xrc.XRCCTRL(self, "LABEL_SCORE")
+        #self.mnFile = self.MAINMENUBAR.GetMenu(self.MAINMENUBAR.FindMenu("MENU_CONF"))
+        self.menuOfCardType= self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
+
+        '''
+        self.mnFile= self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
+        cfg=[['a', 'this is a'],['b', 'this is b'],['C', 'this is C']]
+        for i in cfg:
+            #exec 'self.IDmnFile%s =%d' % (i[0],wx.NewId() )  in locals()
+            #print eval('self.IDmnFile%s' % i[0])
+            menuItem = self.mnFile.Append(-1, i[0], i[1])
+            self.Bind(wx.EVT_MENU, self.event, menuItem)
+        '''
+        ctypes = self.gconf.chessTypeList
+        for ct in ctypes:
+            menuItem = self.menuOfCardType.Append(-1, ct["name"], ct["name"])
+            self.Bind(wx.EVT_MENU, self.onChangeCardType, menuItem);
+
+
+
         ##        PyllkMenuBar = xrcMAINMENUBAR(None)
         ##        self.SetMenuBar(PyllkMenuBar)
         self.SetBackgroundColour(wx.NullColour)
@@ -74,7 +125,13 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.Bind(wx.EVT_MENU, self.OnShuffle, id=xrc.XRCID('MENUSHUFFLE'))
         self.Bind(wx.EVT_MENU, self.OnPause, id=xrc.XRCID('MENUPAUSEPROCEED'))
         self.Bind(EVT_UPDATE_INFOBAR, self.update_info, id = self.board.GetId())
+
+
         self.SetIcon(getPyllkIcon())
+
+    def onChangeCardType(self, event):
+        print self.menuOfCardType.GetHelpString(event.GetId()).encode(self.gconf.encoding)
+        pass
 
     def OnClose(self, event):
         '''Exit the game.'''
@@ -134,9 +191,9 @@ class PyllkMainFrame(xrcMAINFRAME):
 
 
 def main():
-    app = wx.App()
-    PyllkMainFrame(None).Show()
-    app.MainLoop()
+        app = wx.App(0)
+        PyllkMainFrame(None).Show()
+        app.MainLoop()
 
 if __name__ == '__main__':
     main()
