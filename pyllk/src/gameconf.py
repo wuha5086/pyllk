@@ -1,5 +1,5 @@
 #-*- encoding: utf-8 -*-
-# 文件：$id$
+# 文件：$Id$
 # 版本： $Revision$
 
 
