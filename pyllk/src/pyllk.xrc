@@ -72,6 +72,15 @@
       </object>
       <object class="wxMenu" name="MENU_CONF">
         <label>设置(&amp;S)</label>
+        <object class="wxMenu" name="menu_cardType">
+          <label>牌面图案</label>
+        </object>
+        <object class="wxMenuItem" name="bgMusic">
+          <label>背景音乐</label>
+        </object>
+        <object class="wxMenuItem" name="gameMusic">
+          <label>游戏音效</label>
+        </object>
       </object>
       <object class="wxMenu" name="MENU_MARK">
         <label>分数(&amp;c)</label>
@@ -102,26 +111,26 @@
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="LABEL_LEVEL">
+              <size>60,20</size>
               <label>等级：</label>
-              <size>80,20</size>
             </object>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="LABEL_LIFE">
+              <size>60,20</size>
               <label>生命：</label>
-              <size>80,20</size>
             </object>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="LABEL_HINT">
+              <size>60,20</size>
               <label>提示：</label>
-              <size>80,20</size>
             </object>
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="LABEL_CHANGE">
-              <label>无变化</label>
-              <size>80,20</size>
+              <size>140,20</size>
+              <label>变化类型:</label>
             </object>
           </object>
           <object class="sizeritem">
@@ -166,7 +175,6 @@
             <flag>wxALL|wxEXPAND</flag>
             <border>5</border>
           </object>
-          
           <object class="sizeritem">
             <object class="wxStaticText">
               <label>  This program is free software; you can redistribute it and/or modify

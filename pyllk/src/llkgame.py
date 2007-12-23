@@ -26,6 +26,8 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #-----------------------------------------------------------------------------
+# 文件：$Id$
+# 版本：$Revision$
 
 '''
 This module contains the llkgame class which offers the algorithms and data structures.
@@ -34,6 +36,9 @@ import random
 ##import wxversion
 ##wxversion.select('2.8')
 from wx import Point as Point
+
+
+
 
 class llkgame:
     ALGORITHM_GAME_STOP = 1

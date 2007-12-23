@@ -24,6 +24,9 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #-----------------------------------------------------------------------------
+# 文件：$Id$
+# 版本：$Revision$
+
 
 '''
 Python implementation of the popular game LianLianKan.
@@ -38,7 +41,7 @@ from pyllk_xrc import *
 from llkboard import LlkBoard
 from llkboard import EVT_UPDATE_INFOBAR
 from llkrc import *
-import GameConf
+import gameconf
 
 class PyllkAbout(xrcABOUT):
     def __init__(self, parent):
@@ -62,7 +65,7 @@ class PyllkHowToPlay(xrcHOWTOPLAY):
 class PyllkMainFrame(xrcMAINFRAME):
     def __init__(self, parent):
         xrcMAINFRAME.__init__(self, parent)
-        self.gconf = GameConf.GameConf();
+        self.gconf = gameconf.GameConf();
 
                 # Define variables for the controls
         self.MAINMENUBAR = self.GetMenuBar()

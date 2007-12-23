@@ -1,6 +1,6 @@
 #-*- encoding: utf-8 -*-
 # 文件：$Id$
-# 版本： $Revision$
+# 版本：$Revision$
 
 
 import ConfigParser
@@ -47,4 +47,3 @@ class GameConf():
         gconf = GameConf();
         types = gconf.chessTypeList;
         print types
-

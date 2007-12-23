@@ -664,6 +664,7 @@ class LlkBoard(wx.Window):
 
     def refresh_top(self):
         '''Refresh the information shown on the top.'''
+        #TO DO: 文字等应写到配置文件中
         if self.game.status != self.game.ALGORITHM_GAME_STOP:
             t_diff = (u'难度:简单', u'难度:一般', u'难度:困难')
             diff = t_diff[self.game.difficulty]
