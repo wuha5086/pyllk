@@ -35,9 +35,9 @@ This module contains the LlkBoard class which is a window that llk games can be 
 import wx
 import thread
 import time
-from llkrc import *
 import random
-from llkgame import *
+from llkgame import llkgame
+import gamerc
 
 myEVT_UPDATE_INFOBAR = wx.NewEventType()
 EVT_UPDATE_INFOBAR = wx.PyEventBinder(myEVT_UPDATE_INFOBAR, 1)
@@ -262,7 +262,7 @@ class LlkBoard(wx.Window):
         (clipx, clipy, clipw, cliph) = rect.Get()
 ##        self.bgchoice = random.randint(0,15)
         if self.bgchoice is None:
-            bg = wx.Bitmap(get_image_path(random.randint(0,20))) #.GetSubBitmap(rect)
+            bg = wx.Bitmap(gamerc.getBackImagePath(random.randint(0,20))) #.GetSubBitmap(rect)
         elif self.bgchoice < 20:
             self.bgchoice += 1
         else:
@@ -283,35 +283,25 @@ class LlkBoard(wx.Window):
         #get background image
         self.bgchoice = None
         self.get_back()
-##        rect = self.GetClientRect() #get rect
-##        (clipx, clipy, clipw, cliph) = rect.Get()
-##        bg = wx.Bitmap(get_image_path(random.randint(0,15))) #.GetSubBitmap(rect)
-##        (bw, bh) = bg.GetSize()
-##        sizew = min(clipw, bw)
-##        sizeh = min(cliph, bh)
-##        print clipw,bw,cliph,bh #for test
-##        clip = wx.Rect((bw-sizew)/2, (bh-sizeh)/2, sizew, sizeh)
-##        self.bg = bg.GetSubBitmap(clip)
-##        self.bgpos = wx.Point((clipw-sizew)/2,(cliph-sizeh)/2)
 
         #get a bitmap for each cardimage
         self.cardimages = []
-        img = wx.Bitmap(get_image_path('cardimages.png'))
+        img = wx.Bitmap(gamerc.getImagePath('cardimages.png'))
         for i in range(0, LlkBoard.UI_IMAGE_SIZE):
             self.cardimages.append(img.GetSubBitmap(wx.Rect(32*i, 0, 32, 32)))
         del img #of no use from now on, delete it
 
         #get a bitmap for each cardback
         self.cardbacks = []
-        img = wx.Bitmap(get_image_path('cardbacks.png'))
+        img = wx.Bitmap(gamerc.getImagePath('cardbacks.png'))
         for i in range(0, 6):   #TODO: convert these to a variable later
             self.cardbacks.append(img.GetSubBitmap(wx.Rect(0, 56*i, 46, 56)))
         del img #of no use from now, delete it
 
-        self.vertical = wx.Bitmap(get_image_path('vertical.png'))
-        self.horizon = wx.Bitmap(get_image_path('horizon.png'))
-        self.pause = wx.Bitmap(get_image_path('pause.jpg'))
-        self.mainback = wx.Bitmap(get_image_path('mainback.jpg'))   #get initial back image
+        self.vertical = wx.Bitmap(gamerc.getImagePath('vertical.png'))
+        self.horizon = wx.Bitmap(gamerc.getImagePath('horizon.png'))
+        self.pause = wx.Bitmap(gamerc.getImagePath('pause.jpg'))
+        self.mainback = wx.Bitmap(gamerc.getImagePath('mainback.jpg'))   #get initial back image
         self.cardback_choice = random.randint(0, 5)
 
         return True #TODO: Needs polishing
@@ -698,7 +688,7 @@ class LlkBoard(wx.Window):
         '''Play a sound.'''
 ##        print 'before play...'
         try:
-            sound = wx.Sound(get_sound_path(file))
+            sound = wx.Sound(gamerc.get_sound_path(file))
             sound.Play(wx.SOUND_ASYNC)
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")

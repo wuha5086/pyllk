@@ -40,8 +40,7 @@ import wx.xrc as xrc
 from pyllk_xrc import *
 from llkboard import LlkBoard
 from llkboard import EVT_UPDATE_INFOBAR
-from llkrc import *
-import gameconf
+import gamerc
 
 class PyllkAbout(xrcABOUT):
     def __init__(self, parent):
@@ -65,7 +64,7 @@ class PyllkHowToPlay(xrcHOWTOPLAY):
 class PyllkMainFrame(xrcMAINFRAME):
     def __init__(self, parent):
         xrcMAINFRAME.__init__(self, parent)
-        self.gconf = gameconf.GameConf();
+        self.gconf = gamerc.GameConf();
 
                 # Define variables for the controls
         self.MAINMENUBAR = self.GetMenuBar()
@@ -130,7 +129,7 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.Bind(EVT_UPDATE_INFOBAR, self.update_info, id = self.board.GetId())
 
 
-        self.SetIcon(getPyllkIcon())
+        self.SetIcon(gamerc.getPyllkIcon())
 
     def onChangeCardType(self, event):
         print self.menuOfCardType.GetHelpString(event.GetId()).encode(self.gconf.encoding)
