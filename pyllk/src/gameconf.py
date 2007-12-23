@@ -2,6 +2,7 @@
 # 文件：$id$
 # 版本： $Revision$
 
+
 import ConfigParser
 #import IniFile
 import string, os, sys
