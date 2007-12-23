@@ -10,6 +10,10 @@ import codecs
 
 
 def getDictListByIni(file):
+    '''
+        转换ini文件成对应的dicto数组
+
+    '''
     cf = ConfigParser.ConfigParser()
     #cf =IniFile.IniFile("pyllk.conf",encoding="utf-8")
     cf.read(file)
