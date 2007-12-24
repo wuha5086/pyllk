@@ -26,6 +26,8 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #-----------------------------------------------------------------------------
+# 文件：$Id$
+# 版本：$Revision$
 
 '''
 This module contains the LlkBoard class which is a window that llk games can be played upon.
@@ -424,12 +426,15 @@ class LlkBoard(wx.Window):
         LlkBoard.UI_FIXED_START_DRAW_TOP + p1.x*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2),
         useMask=True)
         del img
+
+        (cmx,cmy)=self.getCardMarinPixel();#card margin
+
         #Draw card's front image
         dc.DrawBitmap(self.cardimages[self.game.data[p1.x][p1.y] - 1],
         LlkBoard.UI_FIXED_START_DRAW_LEFT + (p1.y - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
-        (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
+        cmx,
         LlkBoard.UI_FIXED_START_DRAW_TOP + p1.x*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
-        (LlkBoard.UI_BACK_HEIGHT-LlkBoard.UI_BACK_BORDER_2-LlkBoard.UI_IMAGE_SIZE)/2,
+        cmy,
         useMask=True)
 ##        self.OnPaint(None)
         if p2.x != -1 and p2.y != -1:
@@ -447,9 +452,9 @@ class LlkBoard(wx.Window):
             #Draw card's front image
             dc.DrawBitmap(self.cardimages[self.game.data[p2.x][p2.y] - 1],
             LlkBoard.UI_FIXED_START_DRAW_LEFT + (p2.y - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
-            (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
+            cmx,
             LlkBoard.UI_FIXED_START_DRAW_TOP + p2.x*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
-            (LlkBoard.UI_BACK_HEIGHT-LlkBoard.UI_BACK_BORDER_2-LlkBoard.UI_IMAGE_SIZE)/2,
+            cmy,
             useMask=True)
 ##        self.OnPaint(None)
 
@@ -467,24 +472,33 @@ class LlkBoard(wx.Window):
         #modified from ui_game_begin function
 ##        dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
 
+
+        (cmx,cmy)=self.getCardMarinPixel();#card margin
         for i in range(0, self.game.row):
             for j in range(0, self.game.col):
                 if self.game.data[i][j] > 0:
                     #Draw card back images
+                    px =  LlkBoard.UI_FIXED_START_DRAW_LEFT + (j - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)
+                    py =  LlkBoard.UI_FIXED_START_DRAW_TOP + i*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)
                     dc.DrawBitmap(self.cardbacks[self.cardback_choice],
-                    LlkBoard.UI_FIXED_START_DRAW_LEFT + (j - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1),
-                    LlkBoard.UI_FIXED_START_DRAW_TOP + i*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2),
-                    useMask=True)
+                        px,py,
+                        useMask=True)
+
                     #Draw card front image
                     dc.DrawBitmap(self.cardimages[self.game.data[i][j] - 1],
-                    LlkBoard.UI_FIXED_START_DRAW_LEFT + (j - self.game.difficulty)*(LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1)+\
-                    (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2,
-                    LlkBoard.UI_FIXED_START_DRAW_TOP + i*(LlkBoard.UI_BACK_HEIGHT - LlkBoard.UI_BACK_BORDER_2)+\
-                    (LlkBoard.UI_BACK_HEIGHT-LlkBoard.UI_BACK_BORDER_2-LlkBoard.UI_IMAGE_SIZE)/2,
+                        px+cmx,
+                        py+cmy,
                     useMask=True)
 ##        print 'redraw images done'
         #redraw the client area
 ##        self.OnPaint(None)  #TODO: correct or not?
+
+    def getCardMarinPixel(self):
+        ''' 返回每张卡图片和其背景图片间的间距 '''
+        x = (LlkBoard.UI_BACK_WIDTH-LlkBoard.UI_BACK_BORDER_1-LlkBoard.UI_IMAGE_SIZE)/2
+        y = (LlkBoard.UI_BACK_HEIGHT-LlkBoard.UI_BACK_BORDER_2-LlkBoard.UI_IMAGE_SIZE)/2
+        return (x,y)
+
 
     def add_line(self, p1, p2, link_line):
         '''according to the points input, get the link points between the two points
