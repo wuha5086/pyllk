@@ -285,18 +285,24 @@ class LlkBoard(wx.Window):
         self.get_back()
 
         #get a bitmap for each cardimage
+        '''
         self.cardimages = []
         img = wx.Bitmap(gamerc.getImagePath('cardimages.png'))
         for i in range(0, LlkBoard.UI_IMAGE_SIZE):
             self.cardimages.append(img.GetSubBitmap(wx.Rect(32*i, 0, 32, 32)))
         del img #of no use from now on, delete it
+        '''
+        self.loadCardImages(gamerc.getImagePath('cardimages.png'))
 
         #get a bitmap for each cardback
+
         self.cardbacks = []
         img = wx.Bitmap(gamerc.getImagePath('cardbacks.png'))
         for i in range(0, 6):   #TODO: convert these to a variable later
             self.cardbacks.append(img.GetSubBitmap(wx.Rect(0, 56*i, 46, 56)))
         del img #of no use from now, delete it
+
+
 
         self.vertical = wx.Bitmap(gamerc.getImagePath('vertical.png'))
         self.horizon = wx.Bitmap(gamerc.getImagePath('horizon.png'))
@@ -305,6 +311,19 @@ class LlkBoard(wx.Window):
         self.cardback_choice = random.randint(0, 5)
 
         return True #TODO: Needs polishing
+
+    def loadCardImages(self,imgpath,width=32,height=32):
+        self.cardimages = []
+        img = wx.Bitmap(imgpath)
+        for i in range(0, LlkBoard.UI_IMAGE_SIZE):
+            self.cardimages.append(img.GetSubBitmap(wx.Rect(width*i, 0, width, height)))
+        del img #of no use from now on, delete it
+
+    def changeCardType(self,type):
+        print type
+        self.loadCardImages(type["imageurl"],int(type["width"]),int(type["height"]))
+        self.redraw_images();
+        pass
 
     def game_next_level(self):
         '''
