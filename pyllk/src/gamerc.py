@@ -46,7 +46,7 @@ def get_sound_path(name):
     fullname = prefix + name
     return fullname
 
-def getDictListByIni(file):
+def getDictsByIni(file):
     '''
         转换ini文件成对应的dicto数组
 
@@ -58,7 +58,7 @@ def getDictListByIni(file):
     #cf.readfp(codecs.open( "pyllk.conf", "r", "utf-8" ))
     #sEncoding = os.sys.getfilesystemencoding()
 
-    types =[]
+    types ={}
 
     # 返回所有的section
     s = cf.sections()
@@ -69,7 +69,7 @@ def getDictListByIni(file):
         for j in cf.options(i):
             m[j] = cf.get(i,j);
         #print m['type']
-        types.append(m)
+        types[i]=m
     #print types;
     return types
 
@@ -77,10 +77,11 @@ class GameConf():
     CHESS_CONFIG_FILE = "data/Chess/Chess.ini" # 扩展图案配置文件
 
     def __init__(self):
-        self.chessTypeList = getDictListByIni(GameConf.CHESS_CONFIG_FILE)
+        self.chessTypeDict = getDictsByIni(GameConf.CHESS_CONFIG_FILE)
         self.encoding = os.sys.getfilesystemencoding()
 
-    if __name__ == '__main__':
-        gconf = GameConf();
-        types = gconf.chessTypeList;
-        print types
+if __name__ == '__main__':
+    gconf = GameConf();
+    types = gconf.chessTypeDict;
+    for t in types:
+        print t,types[t]
