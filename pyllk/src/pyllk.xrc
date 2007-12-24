@@ -75,11 +75,13 @@
         <object class="wxMenu" name="menu_cardType">
           <label>牌面图案</label>
         </object>
-        <object class="wxMenuItem" name="bgMusic">
+        <object class="wxMenuItem" name="menu_bgMusic">
           <label>背景音乐</label>
+          <checkable>1</checkable>
         </object>
-        <object class="wxMenuItem" name="gameMusic">
+        <object class="wxMenuItem" name="menu_gameMusic">
           <label>游戏音效</label>
+          <checkable>1</checkable>
         </object>
       </object>
       <object class="wxMenu" name="MENU_MARK">

@@ -95,7 +95,10 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.LABEL_CHANGE = xrc.XRCCTRL(self, "LABEL_CHANGE")
         self.GAUGE_TIME = xrc.XRCCTRL(self, "GAUGE_TIME")
         self.LABEL_SCORE = xrc.XRCCTRL(self, "LABEL_SCORE")
-        self.menuOfCardType= self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
+        self.menuOfCardType = self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
+        self.menuOfBgMusic = self.GetMenuBar().FindItemById(xrc.XRCID("menu_bgMusic"));
+        self.menuOfGameMusic = self.GetMenuBar().FindItemById(xrc.XRCID("menu_gameMusic"));
+
 
         '''
            初始化 设置-->牌面图案 子菜单
@@ -122,6 +125,14 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.Bind(EVT_UPDATE_INFOBAR, self.update_info, id = self.board.GetId())
 
 
+        self.menuOfBgMusic.Check(self.board.bgSound)
+        self.menuOfGameMusic.Check(self.board.gameSound)
+
+        self.Bind(wx.EVT_MENU, self.OnGameSound, id=self.menuOfGameMusic.GetId())
+        self.Bind(wx.EVT_MENU, self.OnBgSound, id=self.menuOfBgMusic.GetId())
+
+
+
         self.SetIcon(gamerc.getPyllkIcon())
 
     def onChangeCardType(self, event):
@@ -129,7 +140,14 @@ class PyllkMainFrame(xrcMAINFRAME):
         type = self.gconf.chessTypeDict[name]
         #print name.encode(self.gconf.encoding),type
         self.board.changeCardType(type);
-        pass
+
+
+    def OnGameSound(self,event=None):
+        self.board.gameSound =  not self.board.gameSound
+        self.menuOfBgMusic.Check(self.board.gameSound)
+    def OnBgSound(self,event=None):
+        self.board.gameSound = not self.board.gameSound
+        self.menuOfBgMusic.Check(self.board.gameSound)
 
     def OnClose(self, event):
         '''Exit the game.'''

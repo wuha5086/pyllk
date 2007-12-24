@@ -110,6 +110,10 @@ class LlkBoard(wx.Window):
 
         self.game = llkgame()   #create game instance
 
+        self.gameSound = True;
+
+        self.bgSound = True;
+
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
         size = self.GetClientSize()
@@ -161,7 +165,7 @@ class LlkBoard(wx.Window):
                                 #update info bar
                                 self.refresh_top()
                                 #sound effect
-                                thread.start_new_thread(self.play, ('Link.wav',))
+                                thread.start_new_thread(self.playGameSound, ('Link.wav',))
                                 #SLEEP 0.2 SECONDS
                                 time.sleep(0.1)
                                 #judge if current situation of all the cards has a solution
@@ -182,20 +186,20 @@ class LlkBoard(wx.Window):
                                 self.ui_point1 = wx.Point(-1, -1)    #NOTE
                                 #restore the card image at (i,j)
                                 #sound effect
-                                thread.start_new_thread(self.play, ('CanntLink.wav',))
+                                thread.start_new_thread(self.playGameSound, ('CanntLink.wav',))
                         else:   #click the card that has already been selected,so cancel the selected status
                             self.ui_point1 = wx.Point(-1, -1)
                             self.ui_point2 = wx.Point(-1, -1)
                             self.redraw_images()
                             #replace the card image at (i,j)
                             #sound effect
-                            thread.start_new_thread(self.play, ('Cancel.wav',))
+                            thread.start_new_thread(self.playGameSound, ('Cancel.wav',))
                     else:   #there is no selected cards
                         self.ui_point1 = wx.Point(i, j)
                         self.ui_point2 = wx.Point(-1, -1)
                         self.replace_image(self.ui_point1, self.ui_point2) #replace card image at (i,j)
                         #sound effect
-                        thread.start_new_thread(self.play, ('Click.wav',))
+                        thread.start_new_thread(self.playGameSound, ('Click.wav',))
 ##                    print self.ui_point1, self.ui_point2    #for test
             return True
         else:
@@ -211,7 +215,7 @@ class LlkBoard(wx.Window):
             if self.ui_point1.x > -1:   #cancel the selected status
                 self.redraw_images()
                 self.ui_point1 = wx.Point(-1, -1)
-                thread.start_new_thread(self.play, ('Cancel.wav',))
+                thread.start_new_thread(self.playGameSound, ('Cancel.wav',))
             return True
         return False
 
@@ -337,7 +341,7 @@ class LlkBoard(wx.Window):
         #TODO: change background image
         self.timer.Stop()
         if self.game.game_next_level():
-            thread.start_new_thread(self.play, ('Win.wav',))
+            thread.start_new_thread(self.playGameSound, ('Win.wav',))
             self.get_back()
             if self.cardback_choice >= 5:
                 self.cardback_choice = 0
@@ -369,9 +373,9 @@ class LlkBoard(wx.Window):
             type = wx.ICON_WARNING
 
         if success:
-            thread.start_new_thread(self.play, ('Win.wav',))
+            thread.start_new_thread(self.playGameSound, ('Win.wav',))
         else:
-            thread.start_new_thread(self.play, ('GameOver.wav',))
+            thread.start_new_thread(self.playGameSound, ('GameOver.wav',))
 #            pass
 
         dlg = wx.MessageDialog(self, msg, u'Message', wx.OK | type)
@@ -646,7 +650,7 @@ class LlkBoard(wx.Window):
                                 p2 = wx.Point(k, l)
                                 if self.game.can_link(p1, p2, None):
                                     self.replace_image(p1, p2)
-                                    thread.start_new_thread(self.play, ('Hint.wav',))
+                                    thread.start_new_thread(self.playGameSound, ('Hint.wav',))
                                     return
 
     def game_shuffle(self):
@@ -663,7 +667,7 @@ class LlkBoard(wx.Window):
             self.game.game_shuffle()
             self.redraw_images()
             self.ui_point1 = wx.Point(-1, -1)
-            thread.start_new_thread(self.play, ('Shuffle.wav',))
+            thread.start_new_thread(self.playGameSound, ('Shuffle.wav',))
             self.timer.Start()
 
     def game_pause(self):
@@ -717,14 +721,17 @@ class LlkBoard(wx.Window):
         self.GetEventHandler().ProcessEvent(evt)    #notice
         #event.Skip()
 
-    def play(self, file):
+    def playGameSound(self, file):
         '''Play a sound.'''
 ##        print 'before play...'
-        try:
-            sound = wx.Sound(gamerc.get_sound_path(file))
-            sound.Play(wx.SOUND_ASYNC)
-        except NotImplementedError, v:
-            wx.MessageBox(str(v), "Exception Message")
+        if(self.gameSound):
+            try:
+                sound = wx.Sound(gamerc.get_sound_path(file))
+                sound.Play(wx.SOUND_ASYNC)
+            except NotImplementedError, v:
+                wx.MessageBox(str(v), "Exception Message")
+        else:
+            print 'playing',file,'ignored'
 ##        print '...after play'
 
 
