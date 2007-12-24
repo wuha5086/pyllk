@@ -66,7 +66,7 @@ class PyllkMainFrame(xrcMAINFRAME):
         xrcMAINFRAME.__init__(self, parent)
         self.gconf = gamerc.GameConf();
 
-                # Define variables for the controls
+        # Define variables for the controls
         self.MAINMENUBAR = self.GetMenuBar()
         self.MENU_GAME = xrc.XRCCTRL(self, "MENU_GAME")
         self.SINGLEGAME = xrc.XRCCTRL(self, "SINGLEGAME")
@@ -95,23 +95,16 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.LABEL_CHANGE = xrc.XRCCTRL(self, "LABEL_CHANGE")
         self.GAUGE_TIME = xrc.XRCCTRL(self, "GAUGE_TIME")
         self.LABEL_SCORE = xrc.XRCCTRL(self, "LABEL_SCORE")
-        #self.mnFile = self.MAINMENUBAR.GetMenu(self.MAINMENUBAR.FindMenu("MENU_CONF"))
         self.menuOfCardType= self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
 
         '''
-        self.mnFile= self.GetMenuBar().FindItemById(xrc.XRCID("menu_cardType")).GetSubMenu();
-        cfg=[['a', 'this is a'],['b', 'this is b'],['C', 'this is C']]
-        for i in cfg:
-            #exec 'self.IDmnFile%s =%d' % (i[0],wx.NewId() )  in locals()
-            #print eval('self.IDmnFile%s' % i[0])
-            menuItem = self.mnFile.Append(-1, i[0], i[1])
-            self.Bind(wx.EVT_MENU, self.event, menuItem)
+           初始化 设置-->牌面图案 子菜单
         '''
-        ctypes = self.gconf.chessTypeList
+        ctypes = self.gconf.chessTypeDict
         for ct in ctypes:
-            menuItem = self.menuOfCardType.Append(-1, ct["name"], ct["name"])
+            menuItem = self.menuOfCardType.Append(-1, ctypes[ct]["name"], ct)
             self.Bind(wx.EVT_MENU, self.onChangeCardType, menuItem);
-
+        del ctypes
 
 
         ##        PyllkMenuBar = xrcMAINMENUBAR(None)
@@ -132,7 +125,10 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.SetIcon(gamerc.getPyllkIcon())
 
     def onChangeCardType(self, event):
-        print self.menuOfCardType.GetHelpString(event.GetId()).encode(self.gconf.encoding)
+        name = self.menuOfCardType.GetHelpString(event.GetId()) # type name
+        type = self.gconf.chessTypeDict[name]
+        #print name.encode(self.gconf.encoding),type
+        self.board.changeCardType(type);
         pass
 
     def OnClose(self, event):
