@@ -36,7 +36,7 @@ Python implementation of the popular game LianLianKan.
 ##wxversion.select('2.8')
 import wx
 import wx.xrc as xrc
-
+import thread
 from pyllk_xrc import *
 from llkboard import LlkBoard
 from llkboard import EVT_UPDATE_INFOBAR
@@ -131,9 +131,25 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.Bind(wx.EVT_MENU, self.OnGameSound, id=self.menuOfGameMusic.GetId())
         self.Bind(wx.EVT_MENU, self.OnBgSound, id=self.menuOfBgMusic.GetId())
 
-
-
         self.SetIcon(gamerc.getPyllkIcon())
+
+        thread.start_new_thread(self.PlayBgSound,())
+
+    def PlayBgSound(self):
+        '''Play a bg sound.'''
+        checked = self.menuOfBgMusic.IsChecked()
+##        print 'before play...'
+        if(checked):
+            musicList = self.gconf.bgMusicList
+            for file in musicList:
+                print 'playing ',file
+                try:
+                   gamerc.play_music(file)
+                except NotImplementedError, v:
+                    wx.MessageBox(str(v), "Exception Message")
+        else:
+            print 'playing ignored'
+##        print '...after play'
 
     def onChangeCardType(self, event):
         name = self.menuOfCardType.GetHelpString(event.GetId()) # type name
