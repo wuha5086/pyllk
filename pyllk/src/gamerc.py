@@ -123,15 +123,31 @@ def play_music(music_file,callbackFn = None):
     except pygame.error:
         print "File %s not found! (%s)" % (music_file, pygame.get_error())
         return
-    pygame.mixer.music.play()
+    try:
+        pygame.mixer.music.play()
 
-    while pygame.mixer.music.get_busy():
-        # check if playback has finished
-        print "check if playback has finished"
-        if( callbackFn != None):
-            cabllbackFn()
-        clock.tick(30)
+        while pygame.mixer.music.get_busy():
+            # check if playback has finished
+            #print "check if playback has finished"
+            if( callbackFn != None ):
+                if not callbackFn():
+                    break
+                #print callbackFn()
+            clock.tick(30)
+    except:
+        print "error!"
 
+def playOrPause(pause):
+    #if pygame.mixer.music.get_busy():
+    if pause:
+           pygame.mixer.music.pause()
+    else:
+           pygame.mixer.music.unpause()
+    print 'pause:',pause
+
+def stopBgMusic():
+    if pygame.mixer.music.get_busy():
+        pygame.mixer.music.stop()
 
 class GameConf():
     CHESS_CONFIG_FILE = "data/Chess/Chess.ini" # 扩展图案配置文件

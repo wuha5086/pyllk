@@ -135,16 +135,22 @@ class PyllkMainFrame(xrcMAINFRAME):
 
         thread.start_new_thread(self.PlayBgSound,())
 
+
+
     def PlayBgSound(self):
         '''Play a bg sound.'''
         checked = self.menuOfBgMusic.IsChecked()
+
+        def isChecked():
+            return self.menuOfBgMusic.IsChecked();
+
 ##        print 'before play...'
         if(checked):
             musicList = self.gconf.bgMusicList
             for file in musicList:
                 print 'playing ',file
                 try:
-                   gamerc.play_music(file)
+                   gamerc.play_music(file,callbackFn=isChecked)
                 except NotImplementedError, v:
                     wx.MessageBox(str(v), "Exception Message")
         else:
@@ -164,10 +170,12 @@ class PyllkMainFrame(xrcMAINFRAME):
     def OnBgSound(self,event=None):
         self.board.gameSound = not self.board.gameSound
         self.menuOfBgMusic.Check(self.board.gameSound)
+        thread.start_new_thread(self.PlayBgSound,())
 
     def OnClose(self, event):
         '''Exit the game.'''
         print 'Exit.'
+        gamerc.stopBgMusic();
         self.Close()
 
     def OnGiveup(self, event):
