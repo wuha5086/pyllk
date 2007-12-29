@@ -147,12 +147,14 @@ class PyllkMainFrame(xrcMAINFRAME):
 ##        print 'before play...'
         if(checked):
             musicList = self.gconf.bgMusicList
-            for file in musicList:
-                print 'playing ',file
-                try:
-                   gamerc.play_music(file,callbackFn=isChecked)
-                except NotImplementedError, v:
-                    wx.MessageBox(str(v), "Exception Message")
+            while isChecked(): #使音乐能循环重复播放
+
+                for file in musicList:
+                    print 'playing ',file
+                    try:
+                       gamerc.play_music(file,callbackFn=isChecked)
+                    except NotImplementedError, v:
+                        wx.MessageBox(str(v), "Exception Message")
         else:
             print 'playing ignored'
 ##        print '...after play'
