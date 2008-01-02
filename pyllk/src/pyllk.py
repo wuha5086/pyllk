@@ -41,6 +41,7 @@ from pyllk_xrc import *
 from llkboard import LlkBoard
 from llkboard import EVT_UPDATE_INFOBAR
 import gamerc
+import player
 
 class PyllkAbout(xrcABOUT):
     def __init__(self, parent):
@@ -133,30 +134,22 @@ class PyllkMainFrame(xrcMAINFRAME):
 
         self.SetIcon(gamerc.getPyllkIcon())
 
-        thread.start_new_thread(self.PlayBgSound,())
+        #thread.start_new_thread(self.PlayBgSound,())
+        self.player = player.MidiPlayer(self.gconf.bgMusicList)
+        self.PlayOrPauseBgSound()
 
-
-
-    def PlayBgSound(self):
+    def PlayOrPauseBgSound(self):
         '''Play a bg sound.'''
-        checked = self.menuOfBgMusic.IsChecked()
-
-        def isChecked():
-            return self.menuOfBgMusic.IsChecked();
+        #if( checked == None ):
+        #   checked = self.menuOfBgMusic.IsChecked()
 
 ##        print 'before play...'
-        if(checked):
-            musicList = self.gconf.bgMusicList
-            while isChecked(): #使音乐能循环重复播放
-
-                for file in musicList:
-                    print 'playing ',file
-                    try:
-                       gamerc.play_music(file,callbackFn=isChecked)
-                    except NotImplementedError, v:
-                        wx.MessageBox(str(v), "Exception Message")
+        if(self.player.isPlaying()):
+             self.player.stop()
         else:
-            print 'playing ignored'
+            self.player.play()
+
+
 ##        print '...after play'
 
     def onChangeCardType(self, event):
@@ -170,14 +163,17 @@ class PyllkMainFrame(xrcMAINFRAME):
         self.board.gameSound =  not self.board.gameSound
         self.menuOfBgMusic.Check(self.board.gameSound)
     def OnBgSound(self,event=None):
-        self.board.gameSound = not self.board.gameSound
-        self.menuOfBgMusic.Check(self.board.gameSound)
-        thread.start_new_thread(self.PlayBgSound,())
+        checked = self.menuOfBgMusic.IsChecked()
+        #self.menuOfBgMusic.Check( checked)
+        self.PlayOrPauseBgSound()
+        #thread.start_new_thread(self.PlayBgSound,())
 
     def OnClose(self, event):
         '''Exit the game.'''
         print 'Exit.'
-        gamerc.stopBgMusic();
+        #gamerc.stopBgMusic();
+        self.player.stop()
+
         self.Close()
 
     def OnGiveup(self, event):

@@ -31,8 +31,6 @@ class MediaPlayer(object):
         self.playList = playList
         self.playerThead = None
 
-
-
     def play(self):
         '''
          play media
@@ -53,16 +51,34 @@ class MediaPlayer(object):
         self.__stopPlayThread();
         self.status=MediaPlayer.STATS_PAUSE;
 
+    def playFile(self):
+        ''' 实际的播放代码,子类override此方法以实现对应的播放 '''
+        pass
+
     def run(self):
-        while not self._stopevent.isSet():
-            print 'in run'
+        if(self.playList != None ):
+            while not self._stopevent.isSet(): #使音乐能循环重复播放
+                for file in self.playList:
+                    print 'playing ',file
+                    if( self._stopevent.isSet() ):
+                        break
+                    self.curItem = file
+                    try:
+                       self.playFile(file)
+                    except NotImplementedError, v:
+                        wx.MessageBox(str(v), "Exception Message")
+        pass
 
     def __stopPlayThread(self):
         ''' 结束当前的播放线程 '''
         self._stopevent.set()
         clock = pygame.time.Clock()
+        print "waiting for stop..."
+
         while( self.playerThead != None  and self.playerThead.isAlive() ):
-             clock.tick(15)
+             print "waiting for stop..."
+             clock.tick(35)
+        pygame.mixer.music.stop()
         self.playerThead = None
         self._stopevent =  threading.Event();
 
@@ -75,6 +91,9 @@ class MediaPlayer(object):
         self.__stopPlayThread();
         self.curItem =None
         self.status=MediaPlayer.STATUS_STOP
+
+    def isPlaying(self):
+        return self.status == MediaPlayer.STATUS_PLAYING
 
 
 class PlayerThead(threading.Thread):
@@ -118,24 +137,13 @@ class MidiPlayer(MediaPlayer):
             pygame.mixer.music.play()
             while not self._stopevent.isSet() and pygame.mixer.music.get_busy():
                 # check if playback has finished
-                print "check if playback has finished"
+                #print "check if playback has finished"
                 clock.tick(30)
         except:
             print "error!"
 
     def run(self):
-        if(self.playList != None ):
-             while not self._stopevent.isSet(): #使音乐能循环重复播放
-                for file in playList:
-                    if( self._stopevent.isSet() ):
-                        break
-                    self.curItem = file
-                    print 'playing ',file
-                    try:
-                       self.playFile(file)
-                    except NotImplementedError, v:
-                        wx.MessageBox(str(v), "Exception Message")
-        pass
+        super(MidiPlayer,self).run()
 
 
 
