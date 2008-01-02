@@ -145,7 +145,7 @@ class PyllkMainFrame(xrcMAINFRAME):
 
 ##        print 'before play...'
         if(self.player.isPlaying()):
-             self.player.stop()
+             self.player.pause()
         else:
             self.player.play()
 
@@ -160,8 +160,9 @@ class PyllkMainFrame(xrcMAINFRAME):
 
 
     def OnGameSound(self,event=None):
-        self.board.gameSound =  not self.board.gameSound
-        self.menuOfBgMusic.Check(self.board.gameSound)
+        self.board.gameSound =  self.menuOfBgMusic.IsChecked()
+        #not self.board.gameSound
+        #self.menuOfBgMusic.Check(self.board.gameSound)
     def OnBgSound(self,event=None):
         checked = self.menuOfBgMusic.IsChecked()
         #self.menuOfBgMusic.Check( checked)

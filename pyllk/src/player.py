@@ -38,6 +38,7 @@ class MediaPlayer(object):
         print "in playing..."
         if self.playerThead == None:
             self.playerThead = PlayerThead(self);
+            self.playerThead.setDaemon(True)
             self.playerThead.start();
             self.status = MediaPlayer.STATUS_PLAYING
         else:
@@ -55,18 +56,30 @@ class MediaPlayer(object):
         ''' 实际的播放代码,子类override此方法以实现对应的播放 '''
         pass
 
+    def getNextSong(self,cur=None):
+        '''获取下一首 '''
+        v = None
+        if cur == None:
+            v = self.playList[0]
+        else:
+            i = self.playList.index(cur);
+            if( i >= 0 and i < self.playList.__len__()) :
+                v = self.playList[i+1]
+            else:
+                v = self.playList[0]
+        return v
+
     def run(self):
         if(self.playList != None ):
             while not self._stopevent.isSet(): #使音乐能循环重复播放
-                for file in self.playList:
-                    print 'playing ',file
-                    if( self._stopevent.isSet() ):
-                        break
-                    self.curItem = file
-                    try:
-                       self.playFile(file)
-                    except NotImplementedError, v:
-                        wx.MessageBox(str(v), "Exception Message")
+                #for file in self.playList:
+                file = self.getNextSong(self.curItem)
+                print 'playing ',file
+                self.curItem = file
+                try:
+                   self.playFile(file)
+                except NotImplementedError, v:
+                    wx.MessageBox(str(v), "Exception Message")
         pass
 
     def __stopPlayThread(self):
